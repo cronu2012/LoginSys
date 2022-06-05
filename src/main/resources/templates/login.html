@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css}" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js}"
+            integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+            crossorigin="anonymous"></script>
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <style>
+
+
+        .btn-primary {
+            margin: auto 5px;
+        }
+
+        .button {
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn btn-primary:nth-child(2) {
+            background-color: red;
+        }
+
+        .error {
+            display: inline-block;
+            margin: auto 10px;
+            color: red;
+        }
+
+
+    </style>
+
+    <title>Login Page</title>
+</head>
+<body>
+<div class="main">
+    <article class="block">
+        <form th:action="@{/login}" method="post" >
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label" th:text="#{login.email}"></label>
+                <p class="error" th:text="${errorMsgForEmail}"></p>
+                <input name="emailParam" type="text" class="form-control" id="exampleInputEmail1"
+                       aria-describedby="emailHelp"
+                       th:value="${email}">
+                <div id="emailHelp" class="form-text" th:text="#{login.email.annotation}"></div>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label" th:text="#{login.password}"></label>
+                <p class="error" th:text="${errorMsgForPsw}"></p>
+                <input name="passwordParam" type="password" class="form-control" id="exampleInputPassword1"
+                       th:value="${password}">
+                <div class="form-text" th:text="#{login.password.hint}"></div>
+
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1" th:text="#{login.remember}"></label>
+            </div>
+            <div class="button">
+                <button type="submit" class="btn btn-primary" th:text="#{login.submit}"></button>
+                <button type="reset" class="btn btn-primary" th:text="#{login.clear}"></button>
+                <a th:href="@{/create}" th:text="#{login.create}"></a>
+            </div>
+        </form>
+    </article>
+</div>
+</body>
+</html>

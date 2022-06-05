@@ -1,0 +1,22 @@
+body {
+    background-color: lightgray;
+}
+.main{
+    display: flex;
+    justify-content: center;
+}
+
+.block {
+    width: 600px;
+    /*height: 400px;*/
+    margin-top: 20px;
+    padding: 30px;
+    background-color: white;
+    border-bottom: 2px gray solid;
+    border-right: 2px gray solid;
+    border-radius: 20px;
+}
+
+p {
+    text-align: center;
+}
