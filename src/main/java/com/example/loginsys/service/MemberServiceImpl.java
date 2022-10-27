@@ -29,6 +29,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public List<Member> queryByNameOrEmail(String name, String email) {
+        return memberDao.getByNameOrEmail(name, email);
+    }
+
+    @Override
     public Integer insert(Member member) {
         return memberDao.insert(member);
     }

@@ -20,9 +20,14 @@ import java.util.*;
 @Component
 public class MemberDaoImpl implements MemberDao {
     private static Logger logger = LoggerFactory.getLogger(MemberDaoImpl.class);
-    private static final String SQL_GET_ALL = "select id,name,email,password,gender,birthday,image1 from member";
+    private static final String GET_ALL =
+            "select id,name,email,password,gender,birthday,image1 from member";
 
-    private static final String SQL_INSERT =
+    private static final String GET_NAME_OR_EMAIL =
+            "select id,name,email,password,gender,birthday,image1 from member where name = :name or email = :email";
+
+
+    private static final String INSERT =
             "insert into member (name,email,password,gender,birthday,image1) " +
                     "value (:name,:email,:password,:gender,:birthday,:image1)";
 
@@ -34,10 +39,23 @@ public class MemberDaoImpl implements MemberDao {
     public List<Member> getAll() {
         Map<String, Object> map = new HashMap<>();
 
-        List<Member> list = jdbcTemplate.query(SQL_GET_ALL, map, new MemberRowMapper());
+        List<Member> list = jdbcTemplate.query(GET_ALL, map, new MemberRowMapper());
 
         return list;
     }
+
+
+    @Override
+    public  List<Member> getByNameOrEmail(String name, String email) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("email", email);
+
+        List<Member> list = jdbcTemplate.query(GET_NAME_OR_EMAIL, map, new MemberRowMapper());
+
+        return list;
+    }
+
 
     @Override
     public Integer insert(Member member) {
@@ -50,7 +68,7 @@ public class MemberDaoImpl implements MemberDao {
         map.put("image1", member.getImage1());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         try {
-            jdbcTemplate.update(SQL_INSERT, new MapSqlParameterSource(map), keyHolder);
+            jdbcTemplate.update(INSERT, new MapSqlParameterSource(map), keyHolder);
         } catch (Exception sqlException) {
             logger.error(sqlException.getMessage());
             return null;

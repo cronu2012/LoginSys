@@ -5,9 +5,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
-public interface MemberDao {
-     List<Member> getAll();
 
-     Integer insert(Member member);
+public interface MemberDao {
+    List<Member> getAll();
+
+    List<Member> getByNameOrEmail(String name, String email);
+
+
+    Integer insert(Member member);
 }

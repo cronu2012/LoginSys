@@ -5,9 +5,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
+
 public interface MemberService {
     Member isMember(String email,String password);
+
+    List<Member> queryByNameOrEmail(String name, String email);
 
     Integer insert(Member member);
 }

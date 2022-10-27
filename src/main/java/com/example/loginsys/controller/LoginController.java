@@ -16,12 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -88,6 +86,16 @@ public class LoginController {
             errMsg.add("暱稱格式錯誤!!");
         }
         if (birthday == null) errMsg.add("請輸入出生日期!!");
+
+        List<Member> members = memberService.queryByNameOrEmail(n, e);
+        logger.info(members.toString());
+        if (members != null) {
+           for(Member member : members){
+               if(member.getEmail().equals(e))  errMsg.add("該電子郵件已經被使用!!");
+               if(member.getName().equals(n)) errMsg.add("該暱稱已經被使用!!");
+           }
+        }
+
 
         if (errMsg.size() != 0) {
             model.addAttribute("errMsg", errMsg);
