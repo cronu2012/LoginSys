@@ -34,15 +34,12 @@ public class LoginController {
     @Autowired
     private MemberService memberService;
 
-    @RequestMapping("/")
-    public String index() {
-        return "index";
-    }
 
-//    @GetMapping("/login")
-//    public String loginPage() {
-//        return "login";
-//    }
+
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
+    }
 
     @GetMapping("/create")
     public String createPage() {
@@ -88,7 +85,6 @@ public class LoginController {
         if (birthday == null) errMsg.add("請輸入出生日期!!");
 
         List<Member> members = memberService.queryByNameOrEmail(n, e);
-        logger.info(members.toString());
         if (members != null) {
            for(Member member : members){
                if(member.getEmail().equals(e))  errMsg.add("該電子郵件已經被使用!!");
@@ -128,7 +124,7 @@ public class LoginController {
         return "create";
     }
 
-    @PostMapping("/login")
+    @PostMapping("/login.do")
     public String login(
             Model model,
             @RequestParam String emailParam,

@@ -38,7 +38,7 @@
 <body>
 <div class="main">
     <article class="block">
-        <form th:action="@{/login}" method="post" >
+        <form th:action="@{/login.do}" method="post" >
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label" th:text="#{login.email}"></label>
                 <p class="error" th:text="${errorMsgForEmail}"></p>

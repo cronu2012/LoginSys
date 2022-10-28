@@ -11,5 +11,7 @@ public interface MemberService {
 
     List<Member> queryByNameOrEmail(String name, String email);
 
+    List<Member> queryAll();
+
     Integer insert(Member member);
 }

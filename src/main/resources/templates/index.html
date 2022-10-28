@@ -8,39 +8,64 @@
             integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
             crossorigin="anonymous"></script>
     <link th:href="@{/css/style.css}" rel="stylesheet">
-    <title>首頁</title>
+    <style>
+        .button > * {
+            margin: auto 5px;
+        }
+    </style>
 
+
+    <title>首頁</title>
 </head>
 <body>
 <div class="main">
     <article class="block">
+        <div>
+            <h3>搜尋會員</h3>
+        </div>
+        <div class="form-floating mb-3">
+
+            <input name="email" type="text" class="form-control" id="floatingEmail" placeholder="name@example.com">
+            <label for="floatingEmail" th:text="#{index.member.email}"></label>
+        </div>
+        <div class="form-floating mb-3">
+            <input name="name" type="text" class="form-control" id="floatingName" placeholder="name@example.com">
+            <label for="floatingName" th:text="#{index.member.name}"></label>
+        </div>
+        <div class="button">
+            <button id="submit" type="button" class="btn btn-primary" th:text="#{index.member.search}"></button>
+            <button id="clear" type="button" class="btn btn-primary" th:text="#{login.clear}"></button>
+        </div>
 
 
-
-        <table class="table">
-            <thead>
-<!--            <tr>-->
-<!--                <th scope="col" th:text="#{index.member.id}"></th>-->
-<!--                <th scope="col" th:text="#{index.member.name}"></th>-->
-<!--                <th scope="col" th:text="#{index.member.email}"></th>-->
-<!--                <th scope="col" th:text="#{index.member.gender}"></th>-->
-<!--                <th scope="col" th:text="#{index.member.birthday}"></th>-->
-<!--            </tr>-->
-
-            </thead>
-            <tbody>
-<!--            <tr>-->
-<!--                <td th:text="${member!=null ? member.id:''}"></td>-->
-<!--                <td th:text="${member!=null ? member.name: ''}"></td>-->
-<!--                <td th:text="${member!=null ? member.email:''}"></td>-->
-<!--                <td th:text="${member!=null ? member.gender: ''}"></td>-->
-<!--                <td th:text="${member!=null ? member.birthday: '   '}"></td>-->
-<!--            </tr>-->
-
-            </tbody>
-        </table>
     </article>
 </div>
+<script>
+    const url_all = 'http://localhost:8080/index/members';
 
+    const email = document.getElementById("floatingEmail").value;
+    const name = document.getElementById("floatingName").value;
+    const submit = document.getElementById("submit");
+
+    function getAll() {
+        fetch(url_all).then((response) => {
+            return response.json();
+        }).then((data) => {
+            console.log(data);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
+    submit.addEventListener('click', function (e) {
+        if (email === '' && name === '') {
+            getAll();
+        } else {
+
+        }
+    }, false);
+
+
+</script>
 </body>
 </html>
