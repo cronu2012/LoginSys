@@ -13,5 +13,7 @@ public interface MemberService {
 
     List<Member> queryAll();
 
+    Member queryOne(Integer integer);
+
     Integer insert(Member member);
 }

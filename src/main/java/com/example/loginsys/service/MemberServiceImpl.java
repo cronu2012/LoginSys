@@ -39,6 +39,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Member queryOne(Integer integer) {
+        return memberDao.getById(integer);
+    }
+
+    @Override
     public Integer insert(Member member) {
         return memberDao.insert(member);
     }

@@ -23,6 +23,9 @@ public class MemberDaoImpl implements MemberDao {
     private static final String GET_ALL =
             "select id,name,email,password,gender,birthday,image1 from member";
 
+    private static final String GET_ONE =
+            "select id,name,email,password,gender,birthday,image1 from member where id = :id";
+
     private static final String GET_NAME_OR_EMAIL =
             "select id,name,email,password,gender,birthday,image1 from member where name = :name or email = :email";
 
@@ -39,14 +42,17 @@ public class MemberDaoImpl implements MemberDao {
     public List<Member> getAll() {
         Map<String, Object> map = new HashMap<>();
 
-        List<Member> list = jdbcTemplate.query(GET_ALL, map, new MemberRowMapper());
+        List<Member> data = jdbcTemplate.query(GET_ALL, map, new MemberRowMapper());
+        for (Member member : data) {
+            member.setPassword(null);
+        }
 
-        return list;
+        return data;
     }
 
 
     @Override
-    public  List<Member> getByNameOrEmail(String name, String email) {
+    public List<Member> getByNameOrEmail(String name, String email) {
         Map<String, Object> map = new HashMap<>();
         map.put("name", name);
         map.put("email", email);
@@ -54,6 +60,19 @@ public class MemberDaoImpl implements MemberDao {
         List<Member> list = jdbcTemplate.query(GET_NAME_OR_EMAIL, map, new MemberRowMapper());
 
         return list;
+    }
+
+    @Override
+    public Member getById(Integer integer) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", integer.toString());
+        List<Member> members = jdbcTemplate.query(GET_ONE, map, new MemberRowMapper());
+        logger.info(members.toString());
+        if (members.size()!=0){
+            return members.get(0);
+        }else {
+            return null;
+        }
     }
 
 

@@ -11,6 +11,7 @@ public interface MemberDao {
 
     List<Member> getByNameOrEmail(String name, String email);
 
+    Member getById(Integer integer);
 
     Integer insert(Member member);
 }

@@ -12,6 +12,20 @@
         .button > * {
             margin: auto 5px;
         }
+
+        .button {
+            display: flex;
+            justify-content: right;
+        }
+
+        h3 {
+            display: flex;
+            justify-content: center;
+        }
+
+        .table {
+            display: none;
+        }
     </style>
 
 
@@ -23,45 +37,126 @@
         <div>
             <h3>搜尋會員</h3>
         </div>
+        <div class="mb-3">
+            <input name="Id" type="number" id="floatingID" placeholder="ID" min="1">
+            <button id="id_search" type="button" class="btn btn-primary">ID搜尋</button>
+        </div>
         <div class="form-floating mb-3">
-
             <input name="email" type="text" class="form-control" id="floatingEmail" placeholder="name@example.com">
-            <label for="floatingEmail" th:text="#{index.member.email}"></label>
+            <label for="floatingEmail" th:text="#{index.email}"></label>
         </div>
         <div class="form-floating mb-3">
             <input name="name" type="text" class="form-control" id="floatingName" placeholder="name@example.com">
-            <label for="floatingName" th:text="#{index.member.name}"></label>
+            <label for="floatingName" th:text="#{index.name}"></label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Male" id="flexCheckDefault">
+            <label class="form-check-label" for="flexCheckDefault" th:text="#{index.gender.male}"></label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Female" id="flexCheckChecked" checked>
+            <label class="form-check-label" for="flexCheckChecked" th:text="#{index.gender.female}"></label>
         </div>
         <div class="button">
-            <button id="submit" type="button" class="btn btn-primary" th:text="#{index.member.search}"></button>
+            <button id="submit" type="button" class="btn btn-primary" th:text="#{index.search}"></button>
             <button id="clear" type="button" class="btn btn-primary" th:text="#{login.clear}"></button>
         </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col" th:text="#{index.id}"></th>
+                <th scope="col" th:text="#{index.name}"></th>
+                <th scope="col" th:text="#{index.email}"></th>
+                <th scope="col" th:text="#{index.gender}"></th>
+                <th scope="col" th:text="#{index.birthday}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
 
 
     </article>
 </div>
 <script>
-    const url_all = 'http://localhost:8080/index/members';
-
-    const email = document.getElementById("floatingEmail").value;
-    const name = document.getElementById("floatingName").value;
+    const url_member = 'http://localhost:8080/index/members';
+    const email = document.getElementById("floatingEmail");
+    const name = document.getElementById("floatingName");
     const submit = document.getElementById("submit");
+    const id = document.getElementById("floatingID");
+    const idSearch = document.getElementById("id_search");
+    const table = document.getElementsByClassName("table")[0];
 
     function getAll() {
-        fetch(url_all).then((response) => {
+        fetch(url_member).then((response) => {
             return response.json();
         }).then((data) => {
             console.log(data);
+            const tbody = document.querySelector(".table tbody");
+
+            for (const member of data) {
+                tbody.innerHTML +=
+                    '<tr>' +
+                    '<td>' + member.id + '</td>' +
+                    '<td>' + member.name + '</td>' +
+                    '<td>' + member.email + '</td>' +
+                    '<td>' + member.gender + '</td>' +
+                    '<td>' + member.birthday + '</td>' +
+                    '</tr>'
+            }
         }).catch((error) => {
             console.log(error);
         })
     }
 
+    function getOne(id) {
+        const url = url_member + '/' + id
+        fetch(url).then((response) => {
+            return response.json();
+        }).then((data) => {
+            console.log(data)
+            const tbody = document.querySelector(".table tbody");
+            const member = data
+            tbody.innerHTML +=
+                '<tr>' +
+                '<td>' + member.id + '</td>' +
+                '<td>' + member.name + '</td>' +
+                '<td>' + member.email + '</td>' +
+                '<td>' + member.gender + '</td>' +
+                '<td>' + member.birthday + '</td>' +
+                '</tr>'
+
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
+
     submit.addEventListener('click', function (e) {
-        if (email === '' && name === '') {
+        table.style.display = "block";
+        const tr = document.querySelectorAll(".table tbody tr");
+        for (const t of tr) {
+            t.remove();
+        }
+        const emailStr = email.value.trim();
+        const nameStr = name.value.trim();
+
+        if (emailStr == '' && nameStr == '') {
             getAll();
         } else {
 
+        }
+    }, false);
+
+    idSearch.addEventListener('click', function (e) {
+        table.style.display = "block";
+        const tr = document.querySelectorAll(".table tbody tr");
+        for (const t of tr) {
+            t.remove();
+        }
+        const memberId = id.value.trim();
+        if(memberId != ''){
+            getOne(memberId);
         }
     }, false);
 
