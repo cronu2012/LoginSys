@@ -22,10 +22,20 @@ public class IndexController {
         return "index";
     }
 
-    @GetMapping("/index/members")
+    @GetMapping("/index/members/all")
     @ResponseBody
     public List<Member> all() {
         return memberService.queryAll();
+    }
+
+    @GetMapping("/index/members")
+    @ResponseBody
+    public List<Member> some(
+            @RequestParam String name,
+            @RequestParam String email,
+            @RequestParam String gender
+    ) {
+        return memberService.querySome(name, email, gender);
     }
 
     @GetMapping("/index/members/{id}")

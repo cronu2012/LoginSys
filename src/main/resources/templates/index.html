@@ -50,12 +50,17 @@
             <label for="floatingName" th:text="#{index.name}"></label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Male" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault" th:text="#{index.gender.male}"></label>
+            <input class="form-check-input" type="radio" name="gender_radio" value="Male" id="gender_radio_male">
+            <label class="form-check-label" for="gender_radio_male" th:text="#{index.gender.male}"></label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Female" id="flexCheckChecked" checked>
-            <label class="form-check-label" for="flexCheckChecked" th:text="#{index.gender.female}"></label>
+            <input class="form-check-input" type="radio" name="gender_radio" value="Female" id="gender_radio_female"
+                   checked>
+            <label class="form-check-label" for="gender_radio_female" th:text="#{index.gender.female}"></label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="gender_radio" id="gender_radio_all" value="All">
+            <label class="form-check-label" for="gender_radio_all">All</label>
         </div>
         <div class="button">
             <button id="submit" type="button" class="btn btn-primary" th:text="#{index.search}"></button>
@@ -80,15 +85,17 @@
 </div>
 <script>
     const url_member = 'http://localhost:8080/index/members';
-    const email = document.getElementById("floatingEmail");
-    const name = document.getElementById("floatingName");
-    const submit = document.getElementById("submit");
     const id = document.getElementById("floatingID");
     const idSearch = document.getElementById("id_search");
+    const email = document.getElementById("floatingEmail");
+    const name = document.getElementById("floatingName");
+    const gender = document.getElementsByName("gender_radio");
+    const submit = document.getElementById("submit");
     const table = document.getElementsByClassName("table")[0];
 
     function getAll() {
-        fetch(url_member).then((response) => {
+        const url = url_member + "/all"
+        fetch(url).then((response) => {
             return response.json();
         }).then((data) => {
             console.log(data);
@@ -131,6 +138,28 @@
         })
     }
 
+    function getSome(name, email, gender) {
+        const url = url_member + '?name=' + name + '&email=' + email + '&gender=' + gender;
+        fetch(url).then((response) => {
+            return response.json();
+        }).then((data) => {
+            console.log(data);
+            const tbody = document.querySelector(".table tbody");
+            for (const member of data) {
+                tbody.innerHTML +=
+                    '<tr>' +
+                    '<td>' + member.id + '</td>' +
+                    '<td>' + member.name + '</td>' +
+                    '<td>' + member.email + '</td>' +
+                    '<td>' + member.gender + '</td>' +
+                    '<td>' + member.birthday + '</td>' +
+                    '</tr>'
+            }
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
 
     submit.addEventListener('click', function (e) {
         table.style.display = "block";
@@ -140,11 +169,17 @@
         }
         const emailStr = email.value.trim();
         const nameStr = name.value.trim();
+        let genderValue;
+        if (gender[0].checked) {
+            genderValue = gender[0].value;
+        } else if (gender[1].checked) {
+            genderValue = gender[1].value;
+        }
 
-        if (emailStr == '' && nameStr == '') {
+        if (emailStr == '' && nameStr == '' && gender[2].checked) {
             getAll();
         } else {
-
+            getSome(nameStr, emailStr, genderValue)
         }
     }, false);
 
@@ -155,7 +190,7 @@
             t.remove();
         }
         const memberId = id.value.trim();
-        if(memberId != ''){
+        if (memberId != '') {
             getOne(memberId);
         }
     }, false);

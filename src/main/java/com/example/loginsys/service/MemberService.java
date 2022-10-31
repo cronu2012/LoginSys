@@ -7,9 +7,9 @@ import java.util.List;
 
 
 public interface MemberService {
-    Member isMember(String email,String password);
+    Member isMember(String email, String password);
 
-    List<Member> queryByNameOrEmail(String name, String email);
+    List<Member> querySome(String name, String email, String gender);
 
     List<Member> queryAll();
 

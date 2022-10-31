@@ -26,8 +26,13 @@ public class MemberDaoImpl implements MemberDao {
     private static final String GET_ONE =
             "select id,name,email,password,gender,birthday,image1 from member where id = :id";
 
-    private static final String GET_NAME_OR_EMAIL =
-            "select id,name,email,password,gender,birthday,image1 from member where name = :name or email = :email";
+    private static final String GET_SOME_1 =
+            "select id,name,email,password,gender,birthday,image1 " +
+                    "from member where name = :name or email = :email or gender = :gender";
+
+    private static final String GET_SOME_2 =
+            "select id,name,email,password,gender,birthday,image1 " +
+                    "from member where name = :name or email = :email and gender = :gender";
 
 
     private static final String INSERT =
@@ -52,12 +57,29 @@ public class MemberDaoImpl implements MemberDao {
 
 
     @Override
-    public List<Member> getByNameOrEmail(String name, String email) {
+    public List<Member> getByConditions(String name, String email, String gender) {
         Map<String, Object> map = new HashMap<>();
         map.put("name", name);
         map.put("email", email);
+        map.put("gender", gender);
+        List<Member> list = null;
+        if (name.equals("") && email.equals("")) {
+            list = jdbcTemplate.query(GET_SOME_1, map, new MemberRowMapper());
+        } else {
+            list = jdbcTemplate.query(GET_SOME_2, map, new MemberRowMapper());
+        }
 
-        List<Member> list = jdbcTemplate.query(GET_NAME_OR_EMAIL, map, new MemberRowMapper());
+        return list;
+    }
+
+    @Override
+    public List<Member> getByConditions(String name, String email) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("email", email);
+        map.put("gender", "");
+
+        List<Member> list = jdbcTemplate.query(GET_SOME_1, map, new MemberRowMapper());
 
         return list;
     }
@@ -68,9 +90,9 @@ public class MemberDaoImpl implements MemberDao {
         map.put("id", integer.toString());
         List<Member> members = jdbcTemplate.query(GET_ONE, map, new MemberRowMapper());
         logger.info(members.toString());
-        if (members.size()!=0){
+        if (members.size() != 0) {
             return members.get(0);
-        }else {
+        } else {
             return null;
         }
     }

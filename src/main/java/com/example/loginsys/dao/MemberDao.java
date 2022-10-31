@@ -9,7 +9,9 @@ import java.util.List;
 public interface MemberDao {
     List<Member> getAll();
 
-    List<Member> getByNameOrEmail(String name, String email);
+    List<Member> getByConditions(String name, String email, String gender);
+
+    List<Member> getByConditions(String name, String email);
 
     Member getById(Integer integer);
 

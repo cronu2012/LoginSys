@@ -84,7 +84,7 @@ public class LoginController {
         }
         if (birthday == null) errMsg.add("請輸入出生日期!!");
 
-        List<Member> members = memberService.queryByNameOrEmail(n, e);
+        List<Member> members = memberService.querySome(name, email, "");
         if (members != null) {
            for(Member member : members){
                if(member.getEmail().equals(e))  errMsg.add("該電子郵件已經被使用!!");

@@ -29,8 +29,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Member> queryByNameOrEmail(String name, String email) {
-        return memberDao.getByNameOrEmail(name, email);
+    public List<Member> querySome(String name, String email, String gender) {
+        if (gender.equals("")) {
+            return memberDao.getByConditions(name, email);
+        } else {
+            return memberDao.getByConditions(name, email, gender);
+        }
     }
 
     @Override
