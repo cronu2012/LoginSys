@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-public class IndexController {
+public class  IndexController {
     private static Logger logger = LoggerFactory.getLogger(IndexController.class);
 
     @Autowired
